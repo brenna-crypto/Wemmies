@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.Wemmies" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/wemmie_bg</item>
+        <item name="colorPrimary">@color/wemmie_purple</item>
+        <item name="colorPrimaryVariant">@color/wemmie_card</item>
+        <item name="colorOnPrimary">@color/wemmie_text_primary</item>
+    </style>
+</resources>

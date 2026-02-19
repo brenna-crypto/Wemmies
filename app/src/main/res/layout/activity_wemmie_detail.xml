@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wemmie_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COMMUNITY WEMMIE"
+            android:textColor="@color/wemmie_cyan"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Wemmie Emoji Display -->
+        <TextView
+            android:id="@+id/tvWemmieEmoji"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:gravity="center"
+            android:textSize="64sp"
+            android:background="@drawable/bg_wemmie_circle"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Emotion Badge -->
+        <TextView
+            android:id="@+id/tvEmotionBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="6dp"
+            android:textColor="@color/wemmie_cyan"
+            android:textSize="12sp"
+            android:letterSpacing="0.1"
+            android:background="@drawable/bg_badge"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Thought Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            app:cardBackgroundColor="@color/wemmie_card"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <TextView
+                android:id="@+id/tvShamefulThought"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textColor="@color/wemmie_text_primary"
+                android:textSize="16sp"
+                android:lineSpacingExtra="4dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Empathy Count -->
+        <TextView
+            android:id="@+id/tvEmpathyCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/wemmie_empathy_pink"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Transformation Status -->
+        <TextView
+            android:id="@+id/tvTransformStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/wemmie_text_secondary"
+            android:textSize="13sp"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Empathy Wheel Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SEND YOUR EMPATHY"
+            android:textColor="@color/wemmie_purple_light"
+            android:textSize="12sp"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Empathy Wheel Grid -->
+        <GridLayout
+            android:id="@+id/empathyWheelGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="4"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="← BACK TO SPILL"
+            android:textColor="@color/wemmie_text_primary"
+            android:background="@drawable/bg_button_outline"
+            android:layout_marginBottom="32dp"/>
+
+    </LinearLayout>
+</ScrollView>
