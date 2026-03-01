@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wemmies.app.model.Wemmie;
 import java.util.List;
 
+// Adapter for the community spills RecyclerView on the Spill screen
+// It takes a list of Wemmie objects and displays each one as a card
 public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHolder> {
 
+    // Interface to handle click events — the activity decides what happens on tap
     public interface OnSpillClickListener {
         void onSpillClick(Wemmie wemmie);
     }
@@ -23,6 +26,8 @@ public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHol
         this.listener = listener;
     }
 
+    // ViewHolder holds references to the views in each row
+    // This avoids calling findViewById repeatedly which would be slow
     public static class SpillViewHolder extends RecyclerView.ViewHolder {
         TextView tvSpillEmoji;
         TextView tvSpillThought;
@@ -36,6 +41,7 @@ public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHol
         }
     }
 
+    // Inflates the item layout for each row in the RecyclerView
     @NonNull
     @Override
     public SpillViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,6 +50,7 @@ public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHol
         return new SpillViewHolder(view);
     }
 
+    // Binds the data from each Wemmie object to the views in the row
     @Override
     public void onBindViewHolder(@NonNull SpillViewHolder holder, int position) {
         Wemmie wemmie = spills.get(position);
@@ -51,7 +58,7 @@ public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHol
         holder.tvSpillThought.setText(wemmie.getShamefulThought());
         holder.tvSpillEmpathy.setText("♥ " + wemmie.getEmpathyCount());
 
-        // Set emoji based on emotion type
+        // Pick the right emoji based on the emotion type
         switch (wemmie.getEmotionType()) {
             case "sad":     holder.tvSpillEmoji.setText("😢"); break;
             case "anxious": holder.tvSpillEmoji.setText("😰"); break;
@@ -62,10 +69,11 @@ public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHol
             default:        holder.tvSpillEmoji.setText("🌑"); break;
         }
 
-        // Tapping a community spill opens it in Wemmie Detail
+        // When a spill is tapped, notify the activity via the listener
         holder.itemView.setOnClickListener(v -> listener.onSpillClick(wemmie));
     }
 
+    // Tells the RecyclerView how many items to display
     @Override
     public int getItemCount() {
         return spills.size();

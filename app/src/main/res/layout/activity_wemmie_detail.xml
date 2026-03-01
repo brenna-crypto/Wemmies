@@ -96,13 +96,12 @@
             android:letterSpacing="0.1"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Empathy Wheel Grid -->
-        <GridLayout
-            android:id="@+id/empathyWheelGrid"
+        <!-- RecyclerView replacing the old GridLayout -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEmpathyWheel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="4"
+            android:nestedScrollingEnabled="false"
             android:layout_marginBottom="32dp"/>
 
         <!-- Back Button -->
