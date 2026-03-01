@@ -8,7 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.wemmies.app.model.Wemmie;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpillActivity extends AppCompatActivity {
 
@@ -26,6 +30,7 @@ public class SpillActivity extends AppCompatActivity {
         LinearLayout chipsContainer = findViewById(R.id.emotionChipsContainer);
         EditText etThought = findViewById(R.id.etShamefulThought);
         Button btnCreate = findViewById(R.id.btnCreateWemmie);
+        RecyclerView rvCommunitySpills = findViewById(R.id.rvCommunitySpills);
 
         // Build emotion chips programmatically
         for (int i = 0; i < emotions.length; i++) {
@@ -47,13 +52,11 @@ public class SpillActivity extends AppCompatActivity {
             chip.setLayoutParams(params);
 
             chip.setOnClickListener(v -> {
-                // Deselect previous chip
                 if (lastSelectedChip != null) {
                     lastSelectedChip.setBackground(
                             getResources().getDrawable(R.drawable.bg_emotion_chip, getTheme())
                     );
                 }
-                // Select this chip
                 chip.setBackground(
                         getResources().getDrawable(R.drawable.bg_emotion_chip_selected, getTheme())
                 );
@@ -64,10 +67,40 @@ public class SpillActivity extends AppCompatActivity {
             chipsContainer.addView(chip);
         }
 
+        // Sample community spills data
+        List<Wemmie> communitySpills = new ArrayList<>();
+        communitySpills.add(new Wemmie("I feel like a total imposter at work...", "anxious"));
+        communitySpills.add(new Wemmie("I snapped at someone I love today.", "angry"));
+        communitySpills.add(new Wemmie("I said yes when I wanted to say no. Again.", "numb"));
+        communitySpills.add(new Wemmie("I'm so burned out but can't take a break.", "tired"));
+        communitySpills.add(new Wemmie("I feel like I'm falling behind everyone else.", "sad"));
+        communitySpills.add(new Wemmie("I don't feel allowed to struggle.", "ashamed"));
+
+        // Give each sample spill some empathy counts
+        communitySpills.get(0).addEmpathy(); communitySpills.get(0).addEmpathy();
+        communitySpills.get(1).addEmpathy(); communitySpills.get(1).addEmpathy();
+        communitySpills.get(1).addEmpathy();
+        communitySpills.get(2).addEmpathy();
+        communitySpills.get(3).addEmpathy(); communitySpills.get(3).addEmpathy();
+        communitySpills.get(4).addEmpathy();
+        communitySpills.get(5).addEmpathy(); communitySpills.get(5).addEmpathy();
+
+        // Set up RecyclerView
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvCommunitySpills.setLayoutManager(layoutManager);
+
+        SpillAdapter spillAdapter = new SpillAdapter(communitySpills, wemmie -> {
+            // Tapping a community spill opens it in Wemmie Detail
+            Intent intent = new Intent(this, WemmieDetailActivity.class);
+            intent.putExtra("wemmie", wemmie);
+            startActivity(intent);
+        });
+
+        rvCommunitySpills.setAdapter(spillAdapter);
+
         // Create Wemmie button
         btnCreate.setOnClickListener(v -> {
             String thought = etThought.getText().toString().trim();
-
             if (thought.isEmpty()) {
                 Toast.makeText(this, "Please type your shameful thought 💭", Toast.LENGTH_SHORT).show();
                 return;
@@ -76,9 +109,7 @@ public class SpillActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please pick an emotion 💜", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             Wemmie wemmie = new Wemmie(thought, selectedEmotion);
-
             Intent intent = new Intent(this, WemmieDetailActivity.class);
             intent.putExtra("wemmie", wemmie);
             startActivity(intent);

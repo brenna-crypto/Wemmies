@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/wemmie_bg">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wemmie_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,7 +11,7 @@ android:background="@color/wemmie_bg">
         android:padding="24dp"
         android:gravity="center_horizontal">
 
-    <!-- Title -->
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,8 +53,8 @@ android:background="@color/wemmie_bg">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
-            </LinearLayout>
+                android:gravity="center_vertical"/>
+
         </HorizontalScrollView>
 
         <!-- Thought Input -->
@@ -78,7 +78,7 @@ android:background="@color/wemmie_bg">
             android:hint="Type your shameful thought here..."
             android:inputType="textMultiLine"
             android:gravity="top"
-            android:layout_marginBottom="40dp"/>
+            android:layout_marginBottom="24dp"/>
 
         <!-- Create Button -->
         <Button
@@ -91,6 +91,24 @@ android:background="@color/wemmie_bg">
             android:textStyle="bold"
             android:letterSpacing="0.1"
             android:background="@drawable/bg_button_purple"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Community Spills Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OTHERS ARE FEELING THIS TOO..."
+            android:textColor="@color/wemmie_purple_light"
+            android:textSize="12sp"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- RecyclerView for community spills -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCommunitySpills"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
             android:layout_marginBottom="32dp"/>
 
     </LinearLayout>
