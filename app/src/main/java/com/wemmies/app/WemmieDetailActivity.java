@@ -7,18 +7,24 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FieldValue;
 import com.wemmies.app.model.Wemmie;
 import java.util.Arrays;
 import java.util.List;
 
 public class WemmieDetailActivity extends AppCompatActivity {
 
-    private Wemmie wemmie; // the Wemmie object passed from SpillActivity
+    private Wemmie wemmie;
     private TextView tvEmpathyCount;
     private TextView tvTransformStatus;
     private TextView tvWemmieEmoji;
 
-    // Pre-defined empathy responses — no free text allowed to keep the space safe
+    // Firebase instances
+    private FirebaseFirestore db;
+    private FirebaseAnalytics analytics;
+
     private final List<String> empathyResponses = Arrays.asList(
             "💜 So relatable",
             "🫂 You're not alone",
@@ -30,7 +36,6 @@ public class WemmieDetailActivity extends AppCompatActivity {
             "👁️ I see you"
     );
 
-    // Match each emotion type to an emoji for the Wemmie display
     private String getWemmieEmoji(String emotionType) {
         switch (emotionType) {
             case "sad":     return "😢";
@@ -48,10 +53,12 @@ public class WemmieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wemmie_detail);
 
-        // Retrieve the Wemmie object that was passed from SpillActivity via Intent
+        // Initialize Firebase
+        db = FirebaseFirestore.getInstance();
+        analytics = FirebaseAnalytics.getInstance(this);
+
         wemmie = (Wemmie) getIntent().getSerializableExtra("wemmie");
 
-        // Get references to all the views we need to update
         tvWemmieEmoji = findViewById(R.id.tvWemmieEmoji);
         TextView tvEmotionBadge = findViewById(R.id.tvEmotionBadge);
         TextView tvShamefulThought = findViewById(R.id.tvShamefulThought);
@@ -60,45 +67,61 @@ public class WemmieDetailActivity extends AppCompatActivity {
         RecyclerView rvEmpathyWheel = findViewById(R.id.rvEmpathyWheel);
         Button btnBack = findViewById(R.id.btnBack);
 
-        // Populate the screen with the Wemmie's data
         tvWemmieEmoji.setText(getWemmieEmoji(wemmie.getEmotionType()));
         tvEmotionBadge.setText(wemmie.getEmotionType().toUpperCase());
         tvShamefulThought.setText("\"" + wemmie.getShamefulThought() + "\"");
 
-        // Set the initial empathy count and transformation status
         updateEmpathyUI();
 
-        // Set up the RecyclerView for the empathy wheel
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvEmpathyWheel.setLayoutManager(layoutManager);
 
-        // When an empathy button is tapped, add empathy and refresh the UI
         EmpathyAdapter adapter = new EmpathyAdapter(empathyResponses, response -> {
+
+            // Update locally so UI feels instant
             wemmie.addEmpathy();
-            updateEmpathyUI(); // refresh count and check for transformation
+            updateEmpathyUI();
+
+            // If this Wemmie has a Firestore ID, save the update
+            // FieldValue.increment is atomic — safe for multiple users tapping at once
+            if (wemmie.getId() != null) {
+                db.collection("wemmies")
+                        .document(wemmie.getId())
+                        .update("empathyCount", FieldValue.increment(1))
+                        .addOnSuccessListener(unused -> {
+                            // Log Analytics event — HW3 requirement
+                            Bundle bundle = new Bundle();
+                            bundle.putString("emotion_type", wemmie.getEmotionType());
+                            bundle.putString("empathy_response", response);
+                            analytics.logEvent("empathy_sent", bundle);
+
+                            // Log transformation if threshold just hit
+                            if (wemmie.isTransformed()) {
+                                analytics.logEvent("wemmie_transformed", null);
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Couldn't save empathy", Toast.LENGTH_SHORT).show();
+                        });
+            }
+
             Toast.makeText(this, response + " sent! 💜", Toast.LENGTH_SHORT).show();
         });
 
         rvEmpathyWheel.setAdapter(adapter);
-
-        // Back button just closes this activity and returns to the Spill screen
         btnBack.setOnClickListener(v -> finish());
     }
 
-    // Updates the empathy count text and checks if the Wemmie has transformed
-    // This is called every time someone sends empathy
     private void updateEmpathyUI() {
         tvEmpathyCount.setText("♥ " + wemmie.getEmpathyCount() + " empathies received");
 
         if (wemmie.isTransformed()) {
-            // The Wemmie has reached 5 empathies — trigger the transformation
             tvWemmieEmoji.setText("✨");
             tvTransformStatus.setText("This Wemmie has been transformed by empathy 🌟");
             tvTransformStatus.setTextColor(
                     getResources().getColor(R.color.wemmie_cyan, getTheme())
             );
         } else {
-            // Show how many more empathies are needed to transform
             int remaining = 5 - wemmie.getEmpathyCount();
             tvTransformStatus.setText(remaining + " more empathies to transform this Wemmie");
         }
