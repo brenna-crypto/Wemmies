@@ -12,7 +12,20 @@
           "package_name": "com.wemmies.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "67410912224-ub803ar60jnjh7r4u7iqcb60tia582ao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wemmies.app",
+            "certificate_hash": "0b7be6d5da53c2e692cd2b3241582fbcb0b72150"
+          }
+        },
+        {
+          "client_id": "67410912224-4ho5fd7fiao1v2tpb4ttcj6h8q92drv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDMlF5MXKHYGJ9juQeibXpMmb1MOgE5aUE"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67410912224-4ho5fd7fiao1v2tpb4ttcj6h8q92drv5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

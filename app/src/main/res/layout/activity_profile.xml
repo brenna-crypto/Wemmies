@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wemmie_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/btnBackToSpill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textColor="@color/wemmie_cyan"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp" />
+
+        <ImageView
+            android:id="@+id/ivProfilePhoto"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_wemmie_circle"
+            android:padding="8dp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hi!"
+            android:textColor="@color/wemmie_cyan"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/wemmie_text_secondary"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card"
+            android:padding="20dp"
+            android:layout_marginTop="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Progress"
+                android:textColor="@color/wemmie_text_primary"
+                android:textStyle="bold"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tvSpills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📝 Wemmies Shared: 0"
+                android:textColor="@color/wemmie_text_primary"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/tvEmpathies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="❤️ Empathies Sent: 0"
+                android:textColor="@color/wemmie_text_primary"
+                android:textSize="18sp"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/tvMonsters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✨ Monsters Tamed: 0"
+                android:textColor="@color/wemmie_text_primary"
+                android:textSize="18sp"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSignOut"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:text="SIGN OUT"
+            android:textStyle="bold"
+            android:textColor="@color/wemmie_text_primary"
+            android:background="@drawable/bg_button_purple" />
+
+    </LinearLayout>
+</ScrollView>

@@ -11,17 +11,33 @@
         android:padding="24dp"
         android:gravity="center_horizontal">
 
-        <!-- Title -->
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="THE SPILL"
-            android:textColor="@color/wemmie_cyan"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.15"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_marginTop="48dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="THE SPILL"
+                android:textColor="@color/wemmie_cyan"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.15"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/btnProfile"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:text="👤"
+                android:textSize="28sp"
+                android:gravity="center" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,9 +45,8 @@
             android:text="No judgment. Just feel it."
             android:textColor="@color/wemmie_text_secondary"
             android:textSize="14sp"
-            android:layout_marginBottom="40dp"/>
+            android:layout_marginBottom="40dp" />
 
-        <!-- Emotion Selector Label -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,9 +54,8 @@
             android:textColor="@color/wemmie_purple_light"
             android:textSize="12sp"
             android:letterSpacing="0.1"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
-        <!-- Emotion Chips Row -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,11 +67,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical" />
 
         </HorizontalScrollView>
 
-        <!-- Thought Input -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +78,7 @@
             android:textColor="@color/wemmie_purple_light"
             android:textSize="12sp"
             android:letterSpacing="0.1"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
         <EditText
             android:id="@+id/etShamefulThought"
@@ -78,9 +91,8 @@
             android:hint="Type your shameful thought here..."
             android:inputType="textMultiLine"
             android:gravity="top"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="24dp" />
 
-        <!-- Create Button -->
         <Button
             android:id="@+id/btnCreateWemmie"
             android:layout_width="match_parent"
@@ -91,9 +103,8 @@
             android:textStyle="bold"
             android:letterSpacing="0.1"
             android:background="@drawable/bg_button_purple"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginBottom="32dp" />
 
-        <!-- Community Spills Label -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,15 +112,14 @@
             android:textColor="@color/wemmie_purple_light"
             android:textSize="12sp"
             android:letterSpacing="0.1"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp" />
 
-        <!-- RecyclerView for community spills -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCommunitySpills"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginBottom="32dp" />
 
     </LinearLayout>
 </ScrollView>
