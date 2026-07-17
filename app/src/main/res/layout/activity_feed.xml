@@ -29,7 +29,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="THE SPILL"
+                    android:text="COMMUNITY FEED"
                     android:textColor="@color/wemmie_cyan"
                     android:textSize="32sp"
                     android:textStyle="bold"
@@ -41,67 +41,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No judgment. Just feel it."
+                android:text="Lend your empathy to others. You are not alone."
                 android:textColor="@color/wemmie_text_secondary"
                 android:textSize="14sp"
-                android:layout_marginBottom="40dp" />
+                android:layout_marginBottom="32dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="I'M FEELING..."
+                android:text="OTHERS ARE FEELING THIS TOO..."
                 android:textColor="@color/wemmie_purple_light"
                 android:textSize="12sp"
                 android:letterSpacing="0.1"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="16dp" />
 
-            <HorizontalScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCommunitySpills"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:layout_marginBottom="32dp">
-
-                <LinearLayout
-                    android:id="@+id/emotionChipsContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical" />
-
-            </HorizontalScrollView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TYPE YOUR SHAMEFUL THOUGHT"
-                android:textColor="@color/wemmie_purple_light"
-                android:textSize="12sp"
-                android:letterSpacing="0.1"
-                android:layout_marginBottom="12dp" />
-
-            <EditText
-                android:id="@+id/etShamefulThought"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@drawable/bg_input_field"
-                android:padding="16dp"
-                android:textColor="@color/wemmie_text_primary"
-                android:textColorHint="@color/wemmie_text_secondary"
-                android:hint="Type your shameful thought here..."
-                android:inputType="textMultiLine"
-                android:gravity="top"
-                android:layout_marginBottom="24dp" />
-
-            <Button
-                android:id="@+id/btnCreateWemmie"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="CREATE WEMMIE"
-                android:textColor="@color/wemmie_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.1"
-                android:background="@drawable/bg_button_purple"
+                android:nestedScrollingEnabled="false"
                 android:layout_marginBottom="32dp" />
 
         </LinearLayout>

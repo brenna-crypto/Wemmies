@@ -1,107 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wemmie_bg">
 
-    <LinearLayout
+    <!-- Scrollable Unlocked Profile Content -->
+    <ScrollView
+        android:id="@+id/profileContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <TextView
-            android:id="@+id/btnBackToSpill"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="← Back"
-            android:textColor="@color/wemmie_cyan"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp" />
-
-        <ImageView
-            android:id="@+id/ivProfilePhoto"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@mipmap/ic_launcher"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_wemmie_circle"
-            android:padding="8dp"
-            android:layout_marginBottom="24dp" />
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hi!"
-            android:textColor="@color/wemmie_cyan"
-            android:textSize="34sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/wemmie_text_secondary"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView"
+        android:fillViewport="true"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_card"
-            android:padding="20dp"
-            android:layout_marginTop="32dp">
+            android:padding="24dp">
+
+            <!-- Avatar Section -->
+            <TextView
+                android:id="@+id/tvProfileAvatar"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:textSize="56sp"
+                android:background="@drawable/bg_wemmie_circle"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Progress"
-                android:textColor="@color/wemmie_text_primary"
+                android:layout_gravity="center_horizontal"
+                android:text="Tap to change avatar 🌟"
+                android:textColor="@color/wemmie_text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Nickname & Provider Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
+
+                <ImageView
+                    android:id="@+id/ivProviderIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="Sign-in provider"
+                    android:src="@drawable/bg_wemmie_circle"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilNickname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColorHint="@color/wemmie_text_secondary"
+                    app:hintTextColor="@color/wemmie_cyan"
+                    app:boxStrokeColor="@color/wemmie_cyan"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nickname"
+                        android:textColor="@color/wemmie_text_primary"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnReroll"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="🎲"
+                    android:textSize="18sp"
+                    android:background="@drawable/bg_button_outline"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnSaveNickname"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="💾"
+                    android:textSize="18sp"
+                    android:background="@drawable/bg_button_purple"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Statistics Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:padding="20dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your Progress"
+                    android:textColor="@color/wemmie_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tvSpills"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📝 Wemmies Shared: 0"
+                    android:textColor="@color/wemmie_text_primary"
+                    android:textSize="16sp"
+                    android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:id="@+id/tvEmpathies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="❤️ Empathies Sent: 0"
+                    android:textColor="@color/wemmie_text_primary"
+                    android:textSize="16sp"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/tvMonsters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✨ Monsters Tamed: 0"
+                    android:textColor="@color/wemmie_text_primary"
+                    android:textSize="16sp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- My Wemmies List Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MY WEMMIES"
+                android:textColor="@color/wemmie_purple_light"
+                android:textSize="12sp"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="12dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMyWemmies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Sign Out Button -->
+            <Button
+                android:id="@+id/btnSignOut"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="SIGN OUT"
                 android:textStyle="bold"
-                android:textSize="22sp" />
-
-            <TextView
-                android:id="@+id/tvSpills"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📝 Wemmies Shared: 0"
                 android:textColor="@color/wemmie_text_primary"
-                android:textSize="18sp"
-                android:layout_marginTop="20dp" />
+                android:background="@drawable/bg_button_purple"
+                android:layout_marginBottom="32dp" />
 
-            <TextView
-                android:id="@+id/tvEmpathies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="❤️ Empathies Sent: 0"
-                android:textColor="@color/wemmie_text_primary"
-                android:textSize="18sp"
-                android:layout_marginTop="12dp" />
-
-            <TextView
-                android:id="@+id/tvMonsters"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="✨ Monsters Tamed: 0"
-                android:textColor="@color/wemmie_text_primary"
-                android:textSize="18sp"
-                android:layout_marginTop="12dp" />
         </LinearLayout>
+    </ScrollView>
+
+    <!-- Locked Overlay View -->
+    <LinearLayout
+        android:id="@+id/lockOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/wemmie_bg"
+        android:padding="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔒"
+            android:textSize="72sp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile Locked"
+            android:textColor="@color/wemmie_text_primary"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please unlock to view your stats and personal feed history"
+            android:textColor="@color/wemmie_text_secondary"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="32dp" />
 
         <Button
-            android:id="@+id/btnSignOut"
+            android:id="@+id/btnUnlock"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="32dp"
-            android:text="SIGN OUT"
+            android:text="UNLOCK PROFILE"
             android:textStyle="bold"
             android:textColor="@color/wemmie_text_primary"
             android:background="@drawable/bg_button_purple" />
 
     </LinearLayout>
-</ScrollView>
+
+    <!-- Pinned Bottom Navigation -->
+    <include
+        android:id="@+id/bottomNavigationView"
+        layout="@layout/layout_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

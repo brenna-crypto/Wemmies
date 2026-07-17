@@ -7,23 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.wemmies.app.model.Wemmie;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SpillActivity extends AppCompatActivity {
 
@@ -37,9 +30,6 @@ public class SpillActivity extends AppCompatActivity {
     private FirebaseAnalytics analytics;
     private FirebaseAuth auth;
 
-    private final List<Wemmie> communitySpills = new ArrayList<>();
-    private SpillAdapter spillAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,13 +42,29 @@ public class SpillActivity extends AppCompatActivity {
         LinearLayout chipsContainer = findViewById(R.id.emotionChipsContainer);
         EditText etThought = findViewById(R.id.etShamefulThought);
         Button btnCreate = findViewById(R.id.btnCreateWemmie);
-        RecyclerView rvCommunitySpills = findViewById(R.id.rvCommunitySpills);
-        TextView btnProfile = findViewById(R.id.btnProfile);
 
-        btnProfile.setOnClickListener(v -> {
+        // Set up Bottom Navigation listeners
+        findViewById(R.id.navSpill).setOnClickListener(v -> {
+            // Already here
+        });
+
+        findViewById(R.id.navFeed).setOnClickListener(v -> {
+            Intent intent = new Intent(SpillActivity.this, FeedActivity.class);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+            finish();
+        });
+
+        findViewById(R.id.navProfile).setOnClickListener(v -> {
             Intent intent = new Intent(SpillActivity.this, ProfileActivity.class);
             startActivity(intent);
+            overridePendingTransition(0, 0);
+            finish();
         });
+
+        // Highlight Active Tab
+        TextView tvNavText = findViewById(R.id.tvNavSpillText);
+        tvNavText.setTextColor(getResources().getColor(R.color.wemmie_cyan, getTheme()));
 
         for (int i = 0; i < emotions.length; i++) {
             final String emotionKey = emotionKeys[i];
@@ -96,57 +102,23 @@ public class SpillActivity extends AppCompatActivity {
             chipsContainer.addView(chip);
         }
 
-        rvCommunitySpills.setLayoutManager(new LinearLayoutManager(this));
-
-        spillAdapter = new SpillAdapter(communitySpills, wemmie -> {
-            Intent intent = new Intent(this, WemmieDetailActivity.class);
-            intent.putExtra("wemmie", wemmie);
-            startActivity(intent);
-        });
-
-        rvCommunitySpills.setAdapter(spillAdapter);
-
-        db.collection("wemmies")
-                .orderBy("empathyCount", Query.Direction.DESCENDING)
-                .addSnapshotListener((snapshots, error) -> {
-                    if (error != null) {
-                        Toast.makeText(this, "Failed to load Wemmies", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (snapshots != null) {
-                        communitySpills.clear();
-
-                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                            Wemmie w = doc.toObject(Wemmie.class);
-
-                            if (w != null) {
-                                w.setId(doc.getId());
-                                communitySpills.add(w);
-                            }
-                        }
-
-                        spillAdapter.notifyDataSetChanged();
-                    }
-                });
-
         btnCreate.setOnClickListener(v -> {
             String thought = etThought.getText().toString().trim();
 
             if (thought.isEmpty()) {
-                Toast.makeText(this, "Please type your shameful thought 💭", Toast.LENGTH_SHORT).show();
+                showFeedback("Please type your shameful thought 💭");
                 return;
             }
 
             if (selectedEmotion == null) {
-                Toast.makeText(this, "Please pick an emotion 💜", Toast.LENGTH_SHORT).show();
+                showFeedback("Please pick an emotion 💜");
                 return;
             }
 
             FirebaseUser currentUser = auth.getCurrentUser();
 
             if (currentUser == null) {
-                Toast.makeText(this, "Please sign in first.", Toast.LENGTH_SHORT).show();
+                showFeedback("Please sign in first.");
                 return;
             }
 
@@ -170,16 +142,24 @@ public class SpillActivity extends AppCompatActivity {
                         bundle.putString("emotion_type", selectedEmotion);
                         analytics.logEvent("spill_created", bundle);
 
-                        Toast.makeText(this, "Your Wemmie was created 💜", Toast.LENGTH_SHORT).show();
+                        showFeedback("Your Wemmie was created 💜");
 
-                        Intent intent = new Intent(this, WemmieDetailActivity.class);
+                        // Open the Personal Detail screen since they created it
+                        Intent intent = new Intent(this, MyWemmieDetailActivity.class);
                         intent.putExtra("wemmie", wemmie);
                         startActivity(intent);
+                        finish();
                     })
                     .addOnFailureListener(e -> {
                         Log.e("Wemmies", "Failed to save Wemmie", e);
-                        Toast.makeText(this, "Failed to save. Try again.", Toast.LENGTH_SHORT).show();
+                        showFeedback("Failed to save. Try again.");
                     });
         });
+    }
+
+    private void showFeedback(String message) {
+        if (!isFinishing() && !isDestroyed()) {
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
+        }
     }
 }

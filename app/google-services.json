@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "67410912224-n8etav628rfbl53ukohr80rlauea1hrc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wemmies.app",
+            "certificate_hash": "f1e033a4a92683b244c2f4433187bec98450d0d3"
+          }
+        },
+        {
           "client_id": "67410912224-ub803ar60jnjh7r4u7iqcb60tia582ao.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

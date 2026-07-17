@@ -29,6 +29,6 @@ Wemmies is an Android application that provides a safe and anonymous space for u
 
 ---
 
-## Author
+## Authors
 
-Brenna Hymowitz
+Brenna Hymowitz & Matthew Borlak
