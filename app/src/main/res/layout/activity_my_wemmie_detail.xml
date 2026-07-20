@@ -12,6 +12,7 @@
         android:padding="24dp"
         android:gravity="center_horizontal">
 
+        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,25 +22,17 @@
             android:layout_marginBottom="32dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="COMMUNITY WEMMIE"
+                android:text="MY WEMMIE"
                 android:textColor="@color/wemmie_cyan"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.1"
                 android:gravity="center" />
-
-            <TextView
-                android:id="@+id/btnProfile"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:text="👤"
-                android:textSize="28sp"
-                android:gravity="center" />
         </LinearLayout>
 
+        <!-- Emoji Avatar -->
         <TextView
             android:id="@+id/tvWemmieEmoji"
             android:layout_width="120dp"
@@ -49,6 +42,7 @@
             android:background="@drawable/bg_wemmie_circle"
             android:layout_marginBottom="24dp" />
 
+        <!-- Emotion Badge -->
         <TextView
             android:id="@+id/tvEmotionBadge"
             android:layout_width="wrap_content"
@@ -61,6 +55,7 @@
             android:background="@drawable/bg_badge"
             android:layout_marginBottom="24dp" />
 
+        <!-- Shameful Thought Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,6 +75,7 @@
 
         </androidx.cardview.widget.CardView>
 
+        <!-- Stats -->
         <TextView
             android:id="@+id/tvEmpathyCount"
             android:layout_width="wrap_content"
@@ -95,30 +91,34 @@
             android:layout_height="wrap_content"
             android:textColor="@color/wemmie_text_secondary"
             android:textSize="13sp"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="32dp"
+            android:gravity="center"/>
 
+        <!-- Empathy Messages Header -->
         <TextView
-            android:id="@+id/tvSendEmpathyLabel"
+            android:id="@+id/tvEmpathiesHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SEND YOUR EMPATHY"
+            android:text="COMMUNITY SUPPORT RECEIVED"
             android:textColor="@color/wemmie_purple_light"
             android:textSize="12sp"
             android:letterSpacing="0.1"
             android:layout_marginBottom="16dp" />
 
+        <!-- Received Empathy Messages List -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvEmpathyWheel"
+            android:id="@+id/rvReceivedEmpathies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
             android:layout_marginBottom="32dp" />
 
+        <!-- Back Button -->
         <Button
             android:id="@+id/btnBack"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="← BACK TO SPILL"
+            android:text="← BACK TO PROFILE"
             android:textColor="@color/wemmie_text_primary"
             android:background="@drawable/bg_button_outline"
             android:layout_marginBottom="32dp" />

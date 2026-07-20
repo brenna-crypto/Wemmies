@@ -3,6 +3,7 @@ package com.wemmies.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +37,8 @@ public class WemmieDetailActivity extends AppCompatActivity {
     private TextView tvEmpathyCount;
     private TextView tvTransformStatus;
     private TextView tvWemmieEmoji;
+    private TextView tvSendEmpathyLabel;
+    private RecyclerView rvEmpathyWheel;
 
     private FirebaseFirestore db;
     private FirebaseAnalytics analytics;
@@ -62,12 +66,19 @@ public class WemmieDetailActivity extends AppCompatActivity {
 
         wemmie = (Wemmie) getIntent().getSerializableExtra("wemmie");
 
+        if (wemmie == null) {
+            showFeedback("Wemmie not found.");
+            finish();
+            return;
+        }
+
         tvWemmieEmoji = findViewById(R.id.tvWemmieEmoji);
         TextView tvEmotionBadge = findViewById(R.id.tvEmotionBadge);
         TextView tvShamefulThought = findViewById(R.id.tvShamefulThought);
         tvEmpathyCount = findViewById(R.id.tvEmpathyCount);
         tvTransformStatus = findViewById(R.id.tvTransformStatus);
-        RecyclerView rvEmpathyWheel = findViewById(R.id.rvEmpathyWheel);
+        rvEmpathyWheel = findViewById(R.id.rvEmpathyWheel);
+        tvSendEmpathyLabel = findViewById(R.id.tvSendEmpathyLabel);
         Button btnBack = findViewById(R.id.btnBack);
         TextView btnProfile = findViewById(R.id.btnProfile);
 
@@ -76,9 +87,10 @@ public class WemmieDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        tvWemmieEmoji.setText(getWemmieEmoji(wemmie.getEmotionType()));
-        tvEmotionBadge.setText(wemmie.getEmotionType().toUpperCase());
-        tvShamefulThought.setText("\"" + wemmie.getShamefulThought() + "\"");
+        String emotionType = wemmie.getEmotionType();
+        tvWemmieEmoji.setText(getWemmieEmoji(emotionType != null ? emotionType : ""));
+        tvEmotionBadge.setText(emotionType != null ? emotionType.toUpperCase() : "UNKNOWN");
+        tvShamefulThought.setText("\"" + (wemmie.getShamefulThought() != null ? wemmie.getShamefulThought() : "...") + "\"");
 
         updateEmpathyUI();
 
@@ -88,18 +100,33 @@ public class WemmieDetailActivity extends AppCompatActivity {
         rvEmpathyWheel.setAdapter(adapter);
 
         btnBack.setOnClickListener(v -> finish());
+
+        // Check if current user has already sent empathy to this wemmie
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null && wemmie.getId() != null) {
+            db.collection("wemmies")
+                    .document(wemmie.getId())
+                    .collection("empathies")
+                    .document(currentUser.getUid())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            disableEmpathyInput();
+                        }
+                    });
+        }
     }
 
     private void sendEmpathy(String response) {
         FirebaseUser currentUser = auth.getCurrentUser();
 
         if (currentUser == null) {
-            Toast.makeText(this, "Please sign in first.", Toast.LENGTH_SHORT).show();
+            showFeedback("Please sign in first.");
             return;
         }
 
         if (wemmie == null || wemmie.getId() == null) {
-            Toast.makeText(this, "Could not find this Wemmie.", Toast.LENGTH_SHORT).show();
+            showFeedback("Could not find this Wemmie.");
             return;
         }
 
@@ -110,6 +137,19 @@ public class WemmieDetailActivity extends AppCompatActivity {
                 .document(wemmie.getId())
                 .update("empathyCount", FieldValue.increment(1))
                 .addOnSuccessListener(unused -> {
+                    // Save response message in subcollection using user's UID as document ID
+                    Map<String, Object> empathyDoc = new HashMap<>();
+                    empathyDoc.put("response", response);
+                    empathyDoc.put("timestamp", System.currentTimeMillis());
+
+                    db.collection("wemmies")
+                            .document(wemmie.getId())
+                            .collection("empathies")
+                            .document(currentUser.getUid())
+                            .set(empathyDoc)
+                            .addOnSuccessListener(aVoid -> disableEmpathyInput())
+                            .addOnFailureListener(e -> Log.e(TAG, "Failed to write empathy subcollection", e));
+
                     incrementEmpathiesSent(currentUser);
                     checkAndMarkTransformed();
 
@@ -118,21 +158,22 @@ public class WemmieDetailActivity extends AppCompatActivity {
                     bundle.putString("empathy_response", response);
                     analytics.logEvent("empathy_sent", bundle);
 
-                    Toast.makeText(this, response + " sent! 💜", Toast.LENGTH_SHORT).show();
+                    showFeedback(response + " sent! 💜");
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Couldn't save empathy", e);
-                    Toast.makeText(this, "Couldn't save empathy", Toast.LENGTH_SHORT).show();
+                    showFeedback("Couldn't save empathy");
                 });
+    }
+
+    private void disableEmpathyInput() {
+        tvSendEmpathyLabel.setText("YOU HAVE SENT YOUR EMPATHY 💜");
+        rvEmpathyWheel.setVisibility(View.GONE);
     }
 
     private void incrementEmpathiesSent(FirebaseUser currentUser) {
         Map<String, Object> userData = new HashMap<>();
-        userData.put("displayName", currentUser.getDisplayName() != null ? currentUser.getDisplayName() : "Anonymous");
-        userData.put("email", currentUser.getEmail());
         userData.put("empathiesSent", FieldValue.increment(1));
-        userData.put("spillsMade", FieldValue.increment(0));
-        userData.put("monstersTamed", FieldValue.increment(0));
 
         db.collection("users")
                 .document(currentUser.getUid())
@@ -211,6 +252,12 @@ public class WemmieDetailActivity extends AppCompatActivity {
         } else {
             int remaining = 5 - wemmie.getEmpathyCount();
             tvTransformStatus.setText(remaining + " more empathies to transform this Wemmie");
+        }
+    }
+
+    private void showFeedback(String message) {
+        if (!isFinishing() && !isDestroyed()) {
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
         }
     }
 }

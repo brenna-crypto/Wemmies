@@ -55,18 +55,24 @@ public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHol
     public void onBindViewHolder(@NonNull SpillViewHolder holder, int position) {
         Wemmie wemmie = spills.get(position);
 
-        holder.tvSpillThought.setText(wemmie.getShamefulThought());
+        String thought = wemmie.getShamefulThought();
+        holder.tvSpillThought.setText(thought != null ? thought : "...");
         holder.tvSpillEmpathy.setText("♥ " + wemmie.getEmpathyCount());
 
         // Pick the right emoji based on the emotion type
-        switch (wemmie.getEmotionType()) {
-            case "sad":     holder.tvSpillEmoji.setText("😢"); break;
-            case "anxious": holder.tvSpillEmoji.setText("😰"); break;
-            case "angry":   holder.tvSpillEmoji.setText("😤"); break;
-            case "tired":   holder.tvSpillEmoji.setText("😩"); break;
-            case "numb":    holder.tvSpillEmoji.setText("😶"); break;
-            case "ashamed": holder.tvSpillEmoji.setText("😖"); break;
-            default:        holder.tvSpillEmoji.setText("🌑"); break;
+        String emotionType = wemmie.getEmotionType();
+        if (emotionType == null) {
+            holder.tvSpillEmoji.setText("🌑");
+        } else {
+            switch (emotionType) {
+                case "sad":     holder.tvSpillEmoji.setText("😢"); break;
+                case "anxious": holder.tvSpillEmoji.setText("😰"); break;
+                case "angry":   holder.tvSpillEmoji.setText("😤"); break;
+                case "tired":   holder.tvSpillEmoji.setText("😩"); break;
+                case "numb":    holder.tvSpillEmoji.setText("😶"); break;
+                case "ashamed": holder.tvSpillEmoji.setText("😖"); break;
+                default:        holder.tvSpillEmoji.setText("🌑"); break;
+            }
         }
 
         // When a spill is tapped, notify the activity via the listener
@@ -77,5 +83,22 @@ public class SpillAdapter extends RecyclerView.Adapter<SpillAdapter.SpillViewHol
     @Override
     public int getItemCount() {
         return spills.size();
+    }
+
+    /**
+     * Updates the adapter data set using DiffUtil to compute updates,
+     * reducing main thread overhead and enabling smooth addition/removal animations.
+     */
+    public void updateData(List<Wemmie> newSpills) {
+        // Calculate difference between existing list and updated list
+        WemmieDiffCallback diffCallback = new WemmieDiffCallback(this.spills, newSpills);
+        androidx.recyclerview.widget.DiffUtil.DiffResult diffResult = androidx.recyclerview.widget.DiffUtil.calculateDiff(diffCallback);
+        
+        // Update backing data in-place
+        this.spills.clear();
+        this.spills.addAll(newSpills);
+        
+        // Dispatch only targeted structural changes (e.g. notifyItemInserted/Changed)
+        diffResult.dispatchUpdatesTo(this);
     }
 }

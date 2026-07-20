@@ -90,12 +90,24 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnGetStarted"
+        android:id="@+id/btnGoogleSignIn"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:text="GET STARTED"
+        android:text="SIGN IN WITH GOOGLE"
         android:textColor="@color/wemmie_text_primary"
         android:background="@drawable/bg_button_purple"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@id/btnAnonymousSignIn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/btnAnonymousSignIn"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:text="CONTINUE ANONYMOUSLY"
+        android:textColor="@color/wemmie_cyan"
+        android:background="@drawable/bg_button_outline"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
